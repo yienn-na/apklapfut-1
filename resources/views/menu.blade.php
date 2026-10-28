@@ -10,10 +10,10 @@
           <a class="nav-link" href="/home">Dashboard</a>
         </li>
         <li class="nav-item">
-         <a class="nav-link" href="/pembayaran">Pembayaran</a>
+         <a class="nav-link" href="/payments">Pembayaran</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/pelanggan">Pelanggan</a>
+          <a class="nav-link" href="/field-prices">lapangan</a>
       </ul>
       <form class="d-flex">
         <input class="form-control me-2" type="text" placeholder="Search">

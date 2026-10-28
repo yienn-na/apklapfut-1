@@ -229,7 +229,7 @@ class lapfut extends Controller
     
     public function fieldPricesFormTambah() { 
         $fields = $this->futsalModel->getAllFields(); 
-        return view('field_prices_tambah', compact('fields')); 
+        return view('fields_prices_tambah', compact('fields')); 
     }
     
     public function bookingsFormTambah() { 

@@ -37,19 +37,18 @@ class futsal
 
 
     public function insertPrice($data)
-{
-    // Pastikan key-nya id_field sesuai kolom database
-    return DB::table('field_prices')->insert([
-        'id_field'      => $data['field_id'], // Ubah field_id jadi id_field
-        'jenis_hari'    => $data['jenis_hari'],
-        'jam_mulai'     => $data['jam_mulai'],
-        'jam_selesai'   => $data['jam_selesai'],
-        'harga_per_jam' => $data['harga_per_jam']
-    ]);
-}
+    {
+        return DB::table('field_prices')->insert([
+            'id_field'      => $data['field_id'],
+            'jenis_hari'    => $data['jenis_hari'],
+            'jam_mulai'     => $data['jam_mulai'],
+            'jam_selesai'   => $data['jam_selesai'],
+            'harga_per_jam' => $data['harga_per_jam']
+        ]);
+    }
     public function deletePrice($id) { return DB::table('field_prices')->where('id', $id)->delete(); }
 
-  public function getAllBookings()
+    public function getAllBookings()
     {
         return DB::table('bookings')
             ->join('users', 'bookings.id_users', '=', 'users.id')
@@ -66,27 +65,42 @@ class futsal
             ->select('bookings.*', 'users.nama', 'fields.nama_lapangan')
             ->where('bookings.id', $id)
             ->first();
-    }    public function insertBooking($data) { return DB::table('bookings')->insert($data); }
+    }    
+    public function insertBooking($data) { return DB::table('bookings')->insert($data); }
     public function deleteBooking($id) { return DB::table('bookings')->where('id', $id)->delete(); }
     
 
     public function getAllPayments()
-{
-    return DB::table('payments')
-        ->join('bookings', 'payments.id_booking', '=', 'bookings.id') // Ubah booking_id jadi id_booking sesuai Navicat
-        ->select('payments.*', 'bookings.kode_booking')
-        ->get();
-}
-    public function insertPayment($data) { return DB::table('payments')->insert($data); }
+    {
+        return DB::table('payments')
+            ->join('bookings', 'payments.id_booking', '=', 'bookings.id')
+            ->select('payments.*', 'bookings.kode_booking')
+            ->get();
+    }
+
+    public function insertPayment($data) 
+    { 
+        // Dipetakan otomatis dari booking_id (dari form) ke id_booking (di database Navicat)
+        return DB::table('payments')->insert([
+            'id_booking'       => $data['booking_id'] ?? $data['id_booking'] ?? null,
+            'metode_pembayaran'=> $data['metode_pembayaran'] ?? null,
+            'jenis_pembayaran' => $data['jenis_pembayaran'] ?? null,
+            'jumlah_bayar'     => $data['jumlah_bayar'] ?? null,
+            'status'           => $data['status'] ?? null,
+            'bukti_transfer'   => $data['bukti_transfer'] ?? null,
+        ]); 
+    }
+
     public function deletePayment($id) { return DB::table('payments')->where('id', $id)->delete(); }
 
     public function getAllEquipments() { return DB::table('equipments')->get(); }
     public function insertEquipment($data) { return DB::table('equipments')->insert($data); }
     public function deleteEquipment($id) { return DB::table('equipments')->where('id', $id)->delete(); }
+    
     public function getAllPrices()
     {
         return DB::table('field_prices')
-            ->join('fields', 'field_prices.id_field', '=', 'fields.id') // Sesuaikan dengan nama kolom di Navicat
+            ->join('fields', 'field_prices.id_field', '=', 'fields.id')
             ->select('field_prices.*', 'fields.nama_lapangan')
             ->get();
     }
