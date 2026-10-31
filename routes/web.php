@@ -20,7 +20,8 @@ Route::get('/jabatans/hapus/{id}', 'App\Http\Controllers\lapfut@jabatansHapus');
 Route::get('/users', 'App\Http\Controllers\lapfut@users');
 Route::post('/users/tambah', 'App\Http\Controllers\lapfut@usersTambah');
 Route::get('/users/hapus/{id}', 'App\Http\Controllers\lapfut@usersHapus');
-
+Route::get('/users/edit/{id}', 'App\Http\Controllers\lapfut@usersEdit');
+Route::match(['get', 'post'], '/users/update/{id}', [lapfut::class, 'usersUpdate'])->name('users.update');
 // 3. DATA LAPANGAN
 Route::get('/fields', 'App\Http\Controllers\lapfut@fields');
 Route::post('/fields/tambah', 'App\Http\Controllers\lapfut@fieldsTambah');
@@ -62,6 +63,7 @@ Route::get('/users', 'App\Http\Controllers\lapfut@users');
 Route::get('/users/tambah-form', 'App\Http\Controllers\lapfut@usersFormTambah');
 Route::post('/users/tambah', 'App\Http\Controllers\lapfut@usersTambah');
 Route::get('/users/hapus/{id}', 'App\Http\Controllers\lapfut@usersHapus');
+Route::put('/users/update/{id}', 'App\Http\Controllers\lapfut@usersUpdate'); // Route untuk memproses update data user 
 
 // FIELD PRICES (HARGA)
 Route::get('/field-prices', 'App\Http\Controllers\lapfut@fieldPrices');

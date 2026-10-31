@@ -5,19 +5,18 @@
     <h2>Data Users</h2>
     <hr>
 
-    <!-- Tombol Navigasi & Aksi Atas -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="/home" class="btn btn-secondary">Kembali ke Home</a>
         <a href="/users/tambah-form" class="btn btn-primary">+ Tambah User</a>
     </div>
 
-    <!-- Tabel Data Users -->
     <div class="card shadow-sm p-3">
         <div class="table-responsive">
             <table class="table table-bordered table-striped align-middle">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
+                        <th>Foto</th>
                         <th>Jabatan</th>
                         <th>Nama</th>
                         <th>Email</th>
@@ -30,6 +29,13 @@
                     <tr>
                         <td>{{ $d->id }}</td>
                         <td>
+                            @if($d->img)
+                                <img src="{{ asset('storage/img/' . $d->img) }}" alt="Foto" width="50" height="50" class="rounded-circle object-fit-cover">
+                            @else
+                                <span class="badge bg-secondary">Tidak ada</span>
+                            @endif
+                        </td>
+                        <td>
                             <span class="badge bg-secondary">{{ $d->nama_jabatan }}</span>
                         </td>
                         <td><strong>{{ $d->nama }}</strong></td>
@@ -37,6 +43,7 @@
                         <td>{{ $d->no_hp }}</td>
                         <td>
                             <a href="/users/hapus/{{ $d->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus data?')">Hapus</a>
+                            <a href="/users/edit/{{ $d->id }}" class="btn btn-sm btn-warning">Edit</a>
                         </td>
                     </tr>
                     @endforeach

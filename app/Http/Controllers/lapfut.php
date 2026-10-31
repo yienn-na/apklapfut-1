@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\futsal; 
+use Illuminate\Support\Facades\DB;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -17,10 +18,13 @@ class lapfut extends Controller
     }
 
     public function index()
-     { return view("login"); }
-     public function formLogin()
+    { 
+        return view("login"); 
+    }
+
+    public function formLogin()
     {
-    return view('login');
+        return view('login');
     }
 
     public function aksilogin(Request $request)
@@ -74,15 +78,69 @@ class lapfut extends Controller
         $jabatans = $this->futsalModel->getAllJabatan();
         return view('users', compact('data', 'jabatans'));
     }
+
     public function usersTambah(Request $request)
     {
+        $namaFile = null;
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $namaFile = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/img', $namaFile);
+        }
+
         $this->futsalModel->insertUser([
-            'id_jabatan' => $request->id_jabatan, 'nama' => $request->nama,
-            'email' => $request->email, 'no_hp' => $request->no_hp, 'password_hash' => $request->password
+            'id_jabatan'    => $request->id_jabatan, 
+            'nama'          => $request->nama,
+            'email'         => $request->email, 
+            'no_hp'         => $request->no_hp, 
+            'password_hash' => $request->password,
+            'img'           => $namaFile 
         ]);
+
         return redirect('/users');
     }
-    public function usersHapus($id) { $this->futsalModel->deleteUser($id); return redirect('/users'); }
+
+    public function usersHapus($id)
+    {   
+        $this->futsalModel->deleteUser($id); 
+        return redirect('/users');
+    }
+
+    // Fungsi untuk menampilkan halaman Edit User
+    public function usersEdit($id)
+    {
+        $user = DB::table('users')->where('id', $id)->first();
+        $jabatans = $this->futsalModel->getAllJabatan();
+        
+        return view('users_edit', compact('user', 'jabatans'));
+    }
+
+    // Fungsi untuk memproses Update Data User (Menggunakan kolom img)
+    public function usersUpdate(Request $request, $id)
+    {
+        $data = [
+            'id_jabatan' => $request->input('id_jabatan'),
+            'nama'       => $request->input('nama'),
+            'email'      => $request->input('email'),
+            'no_hp'      => $request->input('no_hp'),
+        ];
+
+        if ($request->filled('password')) {
+            $data['password_hash'] = $request->password;
+        }
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $namaFile = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/img', $namaFile);
+            $data['img'] = $namaFile; // Disimpan ke kolom img
+        }
+
+        DB::table('users')->where('id', $id)->update($data);
+
+        return redirect('/users');
+    }
 
     // --- FIELDS ---
     public function fields()
@@ -104,12 +162,13 @@ class lapfut extends Controller
         $fields = $this->futsalModel->getAllFields();
         return view('fields_prices', compact('data', 'fields')); 
     }
-    // Menampilkan halaman/view form tambah lapangan
+    
     public function fieldsFormTambah()
     {
-        $fields = $this->futsalModel->getAllFields(); // Ambil data lapangan
-        return view('tambah_fields', compact('fields')); // Kirim ke view
+        $fields = $this->futsalModel->getAllFields(); 
+        return view('tambah_fields', compact('fields')); 
     }
+    
     public function fieldPricesTambah(Request $request)
     {
         $this->futsalModel->insertPrice([
@@ -131,7 +190,6 @@ class lapfut extends Controller
 
     public function bookingsTambah(Request $request)
     {
-        // Disesuaikan menjadi id_users dan id_field agar sinkron dengan tabel database
         $this->futsalModel->insertBooking([
             'kode_booking' => 'BOOK-' . time(), 
             'id_users'     => $request->user_id,
@@ -229,7 +287,7 @@ class lapfut extends Controller
     
     public function fieldPricesFormTambah() { 
         $fields = $this->futsalModel->getAllFields(); 
-        return view('fields_prices_tambah', compact('fields')); 
+        return view('field_prices_tambah', compact('fields')); 
     }
     
     public function bookingsFormTambah() { 
