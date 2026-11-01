@@ -29,8 +29,8 @@
                     <tr>
                         <td>{{ $d->id }}</td>
                         <td>
-                          @if(!empty($d->img))
-        <img src="{{ asset('img/' . $d->img) }}" width="50" alt="Foto" class="rounded">
+             @if(!empty($d->img) && file_exists(public_path('img/' . $d->img)))
+        <img src="{{ url('img/' . $d->img) }}" width="50" alt="Foto" class="rounded">
     @else
         <span class="badge bg-secondary">Tidak ada</span>
     @endif

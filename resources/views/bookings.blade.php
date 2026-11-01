@@ -93,6 +93,7 @@
                         <td>
                             <a href="/bookings/cetak-window/{{ $d->id }}" target="_blank" class="btn btn-sm btn-info text-white">Print Nota</a>
                             <a href="/bookings/export-pdf/{{ $d->id }}" target="_blank" class="btn btn-sm btn-warning text-white">PDF</a>
+                            <a href="/bookings/export-excel" class="btn btn-sm btn-success text-white">Excel</a>
                             <a href="/bookings/hapus/{{ $d->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
                         </td>
                     </tr>

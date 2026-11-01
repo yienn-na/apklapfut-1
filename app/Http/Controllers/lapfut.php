@@ -86,7 +86,8 @@ class lapfut extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $namaFile = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/img', $namaFile);
+            // Simpan langsung secara fisik ke public/img
+            $file->move(public_path('img'), $namaFile);
         }
 
         $this->futsalModel->insertUser([
@@ -133,7 +134,8 @@ class lapfut extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $namaFile = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/img', $namaFile);
+            // Simpan langsung secara fisik ke public/img
+            $file->move(public_path('img'), $namaFile);
             $data['img'] = $namaFile; // Disimpan ke kolom img
         }
 

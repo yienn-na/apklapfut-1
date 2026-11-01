@@ -42,6 +42,9 @@ Route::get('/bookings', 'App\Http\Controllers\lapfut@bookings');
 Route::get('/bookings/tambah-form', 'App\Http\Controllers\lapfut@bookingsFormTambah');
 Route::post('/bookings/tambah', 'App\Http\Controllers\lapfut@bookingsTambah');
 Route::get('/bookings/hapus/{id}', 'App\Http\Controllers\lapfut@bookingsHapus');
+Route::get('/bookings/cetak-window/{id}', 'App\Http\Controllers\lapfut@cetakWindow');
+Route::get('/bookings/export-pdf/{id}', 'App\Http\Controllers\lapfut@exportPdf');
+Route::get('/bookings/export-excel', 'App\Http\Controllers\lapfut@exportExcel');
 
 // 6. DATA PEMBAYARAN
 Route::get('/payments', 'App\Http\Controllers\lapfut@payments');
