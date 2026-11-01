@@ -29,11 +29,11 @@
                     <tr>
                         <td>{{ $d->id }}</td>
                         <td>
-                            @if($d->img)
-                                <img src="{{ asset('storage/img/' . $d->img) }}" alt="Foto" width="50" height="50" class="rounded-circle object-fit-cover">
-                            @else
-                                <span class="badge bg-secondary">Tidak ada</span>
-                            @endif
+                          @if(!empty($d->img))
+        <img src="{{ asset('img/' . $d->img) }}" width="50" alt="Foto" class="rounded">
+    @else
+        <span class="badge bg-secondary">Tidak ada</span>
+    @endif
                         </td>
                         <td>
                             <span class="badge bg-secondary">{{ $d->nama_jabatan }}</span>
