@@ -12,18 +12,24 @@
             @csrf
             
             <div class="mb-3">
-                <label class="form-label">**Nama Jabatan:**</label>
-                <select name="nama_jabatan" class="form-select" required>
+                <label class="form-label"><strong>Nama Jabatan:</strong></label>
+                <select name="nama_jabatan" class="form-select @error('nama_jabatan') is-invalid @enderror" required>
                     <option value="">-- Pilih Jabatan --</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Kasir">Kasir</option>
-                    <option value="Pelanggan">Pelanggan</option>
+                    <option value="Admin" {{ old('nama_jabatan') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="Kasir" {{ old('nama_jabatan') == 'Kasir' ? 'selected' : '' }}>Kasir</option>
+                    <option value="Pelanggan" {{ old('nama_jabatan') == 'Pelanggan' ? 'selected' : '' }}>Pelanggan</option>
                 </select>
+                
+                @error('nama_jabatan')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
 
             <div class="mb-3">
-                <label class="form-label">**Deskripsi:**</label>
-                <input type="text" name="deskripsi" class="form-control" placeholder="Deskripsi jabatan...">
+                <label class="form-label"><strong>Deskripsi:</strong></label>
+                <input type="text" name="deskripsi" class="form-control" value="{{ old('deskripsi') }}" placeholder="Deskripsi jabatan...">
             </div>
 
             <button type="submit" class="btn btn-primary">Simpan</button>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\lapfut;
 
 // AUTH & NAVIGASI
 Route::get('/', 'App\Http\Controllers\lapfut@index');
@@ -15,7 +16,7 @@ Route::post('/register', 'App\Http\Controllers\lapfut@aksiRegister');
 Route::get('/jabatans', 'App\Http\Controllers\lapfut@jabatans');
 Route::get('/jabatans/tambah-form', 'App\Http\Controllers\lapfut@jabatansFormTambah');
 Route::post('/jabatans/tambah', 'App\Http\Controllers\lapfut@jabatansTambah');
-Route::get('/jabatans/hapus/{id}', 'App\Http\Controllers\lapfut@jabatansHapus');
+Route::get('/jabatans/hapus/{id}', [lapfut::class, 'jabatansHapus']);
 
 // 2. DATA USERS
 Route::get('/users', 'App\Http\Controllers\lapfut@users');

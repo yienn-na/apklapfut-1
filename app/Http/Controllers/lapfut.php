@@ -64,12 +64,29 @@ class lapfut extends Controller
         $data = $this->futsalModel->getAllJabatan();
         return view('jabatans', compact('data'));
     }
+
     public function jabatansTambah(Request $request)
     {
-        $this->futsalModel->insertJabatan(['nama_jabatan' => $request->nama_jabatan, 'deskripsi' => $request->deskripsi]);
+        $this->futsalModel->insertJabatan([
+            'nama_jabatan' => $request->nama_jabatan, 
+            'deskripsi' => $request->deskripsi
+        ]);
         return redirect('/jabatans');
     }
-    public function jabatansHapus($id) { $this->futsalModel->deleteJabatan($id); return redirect('/jabatans'); }
+
+    public function jabatansHapus($id) 
+    { 
+        try {
+            $this->futsalModel->deleteJabatan($id); 
+            return redirect('/jabatans')->with('success', 'Data jabatan berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Menangkap error foreign key constraint (kode 23000 / error 1451)
+            if ($e->getCode() == "23000") {
+                return redirect()->back()->with('error', 'Gagal menghapus! Jabatan ini masih digunakan oleh data user/pegawai.');
+            }
+            throw $e;
+        }
+    }
 
     // --- USERS ---
     public function users()
@@ -103,7 +120,7 @@ class lapfut extends Controller
     }
 
     public function usersHapus($id)
-    {   
+    {  
         $this->futsalModel->deleteUser($id); 
         return redirect('/users');
     }
@@ -245,13 +262,13 @@ class lapfut extends Controller
     public function cetakWindow($id)
     {
         $booking = $this->futsalModel->getBookingById($id);
-        return view('cetak_window', compact('booking'));
+        return view('cetakwindow', compact('booking'));
     }
 
     public function exportPdf($id)
     {
         $booking = $this->futsalModel->getBookingById($id);
-        $html = view('cetak_pdf', compact('booking'))->render();
+        $html = view('cetakpdf', compact('booking'))->render();
         TCPDF::SetTitle('Invoice Booking - ' . $booking->kode_booking);
         TCPDF::AddPage();
         TCPDF::writeHTML($html, true, false, true, false, '');
@@ -289,7 +306,7 @@ class lapfut extends Controller
     
     public function fieldPricesFormTambah() { 
         $fields = $this->futsalModel->getAllFields(); 
-        return view('field_prices_tambah', compact('fields')); 
+        return view('fields_prices_tambah', compact('fields')); // Diperbarui dari field_prices_tambah ke fields_prices_tambah
     }
     
     public function bookingsFormTambah() { 

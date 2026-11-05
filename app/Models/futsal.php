@@ -18,7 +18,18 @@ class futsal
     }
 
     public function getAllJabatan() { return DB::table('jabatans')->get(); }
-    public function insertJabatan($data) { return DB::table('jabatans')->insert($data); }
+    
+    public function insertJabatan($data) 
+    { 
+        $exists = DB::table('jabatans')->where('nama_jabatan', $data['nama_jabatan'])->exists();
+
+        if (!$exists) {
+            return DB::table('jabatans')->insert($data);
+        }
+        
+        return false; 
+    }
+
     public function deleteJabatan($id) { return DB::table('jabatans')->where('id', $id)->delete(); }
 
     public function getAllUsers()
@@ -34,7 +45,6 @@ class futsal
     public function getAllFields() { return DB::table('fields')->get(); }
     public function insertField($data) { return DB::table('fields')->insert($data); }
     public function deleteField($id) { return DB::table('fields')->where('id', $id)->delete(); }
-
 
     public function insertPrice($data)
     {
@@ -69,7 +79,6 @@ class futsal
     public function insertBooking($data) { return DB::table('bookings')->insert($data); }
     public function deleteBooking($id) { return DB::table('bookings')->where('id', $id)->delete(); }
     
-
     public function getAllPayments()
     {
         return DB::table('payments')
@@ -80,7 +89,6 @@ class futsal
 
     public function insertPayment($data) 
     { 
-        // Dipetakan otomatis dari booking_id (dari form) ke id_booking (di database Navicat)
         return DB::table('payments')->insert([
             'id_booking'       => $data['booking_id'] ?? $data['id_booking'] ?? null,
             'metode_pembayaran'=> $data['metode_pembayaran'] ?? null,
